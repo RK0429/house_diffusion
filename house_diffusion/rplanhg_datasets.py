@@ -4,7 +4,24 @@ import torch as th
 
 from PIL import Image, ImageDraw
 import blobfile as bf
-from mpi4py import MPI
+try:
+    from mpi4py import MPI
+except Exception:
+    class DummyComm:
+        def Get_rank(self):
+            return 0
+        def Get_size(self):
+            return 1
+        def bcast(self, data, root=0):
+            return data
+        @property
+        def rank(self):
+            return 0
+        @property
+        def size(self):
+            return 1
+    class MPI:
+        COMM_WORLD = DummyComm()
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
 from glob import glob

@@ -7,7 +7,20 @@ import os
 import socket
 
 import blobfile as bf
-from mpi4py import MPI
+try:
+    from mpi4py import MPI
+except Exception:
+    class DummyComm:
+        def Get_rank(self):
+            return 0
+        def Get_size(self):
+            return 1
+        def bcast(self, data, root=0):
+            return data
+        rank = property(Get_rank)
+        size = property(Get_size)
+    class MPI:
+        COMM_WORLD = DummyComm()
 import torch as th
 import torch.distributed as dist
 
