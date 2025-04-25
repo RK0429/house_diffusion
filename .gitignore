@@ -14,4 +14,4 @@ scripts/ckpts
 scripts/ckpts_backup
 slurm-*
 embedder/ckpts
-
+.venv
